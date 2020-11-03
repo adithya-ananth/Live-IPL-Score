@@ -24,7 +24,6 @@ try:
         live = match.find(class_ = "cb-text-live")
         print('\n' + live.text)
         
-    
 except AttributeError:
     print("\nNo IPL matches at the moment")
 
