@@ -4,7 +4,6 @@ import requests
 r = requests.get('https://www.cricbuzz.com/cricket-match/live-scores')
 soup = bs(r.content, features = 'html.parser')
 
-
 try:
     div = soup.find("div", attrs = {"ng-show" : "active_match_type == 'league-tab'"})
 
