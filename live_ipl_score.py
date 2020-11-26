@@ -1,14 +1,20 @@
 from bs4 import BeautifulSoup as bs
 import requests
+import sys
 
 r = requests.get('https://www.cricbuzz.com/cricket-match/live-scores')
 soup = bs(r.content, features = 'html.parser')
 
 try:
     div = soup.find("div", attrs = {"ng-show" : "active_match_type == 'league-tab'"})
+    
+    title = div.find("h2").text
 
-    title = div.find("h2")
-    print(title.text, end='\n\n')
+    if title != "INDIAN PREMIER LEAGUE 2020":
+        print("\nNo IPL matches at the moment")
+        sys.exit()
+        
+    print(title, end='\n\n')
 
     matches = div.find_all(class_ = "cb-mtch-lst cb-col cb-col-100 cb-tms-itm")
     for match in matches:
@@ -23,10 +29,6 @@ try:
 
         live = match.find(class_ = "cb-text-live")
         print('\n' + live.text)
-        
+
 except AttributeError:
     print("\nNo IPL matches at the moment")
-
-
-
-
