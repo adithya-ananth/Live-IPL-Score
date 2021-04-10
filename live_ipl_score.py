@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup as bs
 import requests
 import sys
+import time
 
 r = requests.get('https://www.cricbuzz.com/cricket-match/live-scores')
 soup = bs(r.content, features = 'html.parser')
@@ -10,25 +11,28 @@ try:
     
     title = div.find("h2").text
 
-    if title != "INDIAN PREMIER LEAGUE 2020":
+    if title != "INDIAN PREMIER LEAGUE 2021":
         print("\nNo IPL matches at the moment")
         sys.exit()
         
-    print(title, end='\n\n')
+    print(f'\n{title}', end='\n\n')
 
-    matches = div.find_all(class_ = "cb-mtch-lst cb-col cb-col-100 cb-tms-itm")
-    for match in matches:
-        team_names = match.find("h3")
-        print(team_names.text[1:-2], end='\n\n')
-        
-        teams = match.find_all(class_ = "cb-ovr-flo cb-hmscg-tm-nm")
-        team_scores = match.find_all("div", attrs = {"style" : "display:inline-block; width:140px"})
+    while True:
+        matches = div.find_all(class_ = "cb-mtch-lst cb-col cb-col-100 cb-tms-itm")
+        for match in matches:
+            team_names = match.find("h3")
+            print(team_names.text[1:-2], end='\n\n')
+            
+            teams = match.find_all(class_ = "cb-ovr-flo cb-hmscg-tm-nm")
+            team_scores = match.find_all("div", attrs = {"style" : "display:inline-block; width:140px"})
 
-        for team, team_score in zip(teams, team_scores):
-            print(f'{team.text}: {team_score.text}')
+            for team, team_score in zip(teams, team_scores):
+                print(f'{team.text}: {team_score.text}')
 
-        live = match.find(class_ = "cb-text-live")
-        print('\n' + live.text)
+            live = match.find(class_ = "cb-text-live")
+            print('\n' + live.text)
+
+            time.sleep(45)
 
 except AttributeError:
     print("\nNo IPL matches at the moment")
