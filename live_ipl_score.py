@@ -32,6 +32,9 @@ while True:
             live = match.find(class_ = "cb-text-live")
             print('\n' + live.text)
 
+            if len(matches) > 1:
+                break
+    
     except AttributeError:
         print("\nNo IPL matches at the moment")
 
