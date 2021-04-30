@@ -29,8 +29,12 @@ while True:
             for team, team_score in zip(teams, team_scores):
                 print(f'{team.text}: {team_score.text}')
 
-            live = match.find(class_ = "cb-text-live")
-            print('\n' + live.text)
+            try:
+                live = match.find(class_ = "cb-text-live")
+                print('\n' + live.text)
+            except AttributeError:
+                completed = match.find(class_ = "cb-text-complete")
+                print('\n' + completed.text)
 
             if len(matches) > 1:
                 break
